@@ -38,7 +38,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CnotHttp.cs" />
     <Compile Include="CnotResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

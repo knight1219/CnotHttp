@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CnotHttp.IntegrationTests
 {
     [TestClass]
-    public class UnitTest1
+    public class GetTests
     {
         [TestMethod]
         public void TestMethod1()
