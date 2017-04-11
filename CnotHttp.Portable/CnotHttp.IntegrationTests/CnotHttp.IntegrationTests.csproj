@@ -57,6 +57,13 @@
     <Compile Include="PostTests.cs" />
     <Compile Include="PutTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestClasses.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CnotHttp.Portable\CnotHttp.Portable.csproj">
+      <Project>{01d842da-1a8f-49ab-a94b-535a538bbe80}</Project>
+      <Name>CnotHttp.Portable</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -9,7 +9,6 @@ namespace CnotHttp.Portable
 
     public interface ICnotResult
     {
-
     }
 
     public interface ICnotResult<TData> : ICnotResult

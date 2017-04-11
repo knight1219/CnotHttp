@@ -107,7 +107,8 @@ namespace CnotHttp.Portable
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (headers.Any())
+            
+            if ( headers != null)
             {
                 foreach (var item in headers)
                 {
@@ -147,18 +148,44 @@ namespace CnotHttp.Portable
 
                 if (clientTask != null)
                 {
-                    var httpTask = await ProcessHttpCall(clientTask);
-                    if (httpTask.Outcome == OutcomeType.Successful)
+                    try
                     {
-                        var stringResult = await httpTask.Result.Content.ReadAsStringAsync();
-                        cnotResult.ServerResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
-                        cnotResult.Error = null;
+                        var httpTask = await ProcessHttpCall(clientTask);
+                        if (httpTask.Outcome == OutcomeType.Successful)
+                        {
+                            var stringResult = await httpTask.Result.Content.ReadAsStringAsync();
+
+
+                            if (typeof(T) == typeof(string))
+                            {
+                                cnotResult.ServerResponse = (T)Convert.ChangeType(stringResult, typeof(T));
+                            }
+                            else
+                            {
+                                cnotResult.ServerResponse = JsonConvert.DeserializeObject<T>(stringResult);
+                            }
+
+                            cnotResult.Error = null;
+                        }
+                        else
+                        {
+                            cnotResult.ServerResponse = default(T);
+                            cnotResult.Error = new Exception(
+                                "Unable to process http request. Status Code " + (int)httpTask.FinalHandledResult.StatusCode,
+                                httpTask.FinalException);
+                        }
                     }
-                    else
+                    catch (JsonException e)
                     {
                         cnotResult.ServerResponse = default(T);
-                        cnotResult.Error = new Exception("Unable to process http request", httpTask.FinalException);
+                        cnotResult.Error = new ArgumentException("Unable to convert response into object", e);
                     }
+                    catch (Exception e)
+                    {
+                        cnotResult.ServerResponse = default(T);
+                        cnotResult.Error = new InvalidOperationException("Unable to complete request", e);
+                    }
+                    
                 }  
             }
 
